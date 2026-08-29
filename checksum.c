@@ -8,7 +8,8 @@ void digest_init(struct cfx_digest *st)
 {
     if (st == NULL)
         return;
-    st->crc = 0xFFFFFFFFu;
+    /* The CRC register starts all-ones, at the width of the field. */
+    st->crc = UINT32_MAX;
     st->adler_a = 1u;
     st->adler_b = 0u;
     st->fletcher = 0u;
