@@ -55,11 +55,11 @@ int session_run_encode(const uint8_t *payload, size_t n,
     size_t i = 0;
     int rc = 0;
 
-    /* One rejection for every bad argument, and nothing the caller owns
-     * is touched until they have all passed. */
-    if (payload == NULL || out == NULL || out_len == NULL || n > CFX_MAX_PAYLOAD)
+    if (payload == NULL || out == NULL || out_len == NULL)
         return CFX_ERR_INPUT;
     *out_len = 0;
+    if (n > CFX_MAX_PAYLOAD)
+        return CFX_ERR_INPUT;
 
     stats_init(&stats);
     stats_accumulate(payload, n, &stats);
