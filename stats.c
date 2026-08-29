@@ -61,7 +61,9 @@ uint32_t stats_bit_profile(const uint8_t *src, size_t n)
         ones += bits_popcount_u32(src[i]);
         packed = (packed << 1) | (uint32_t)(src[i] & 1u);
     }
-    return (ones << 8) | bits_leading_zeros_u32(packed);
+    /* Two fields in one word: the set-bit count in the high byte and the
+     * leading-zero count in the low one. */
+    return ((ones & 0xFFu) << 8) | bits_leading_zeros_u32(packed);
 }
 
 /* Close the accumulator: derive the mean as a fixed-point value.
