@@ -26,9 +26,7 @@ fx_t fx_sub(fx_t a, fx_t b)
 /* a * b, with the Q16.16 rescale, truncating toward zero. */
 fx_t fx_mul(fx_t a, fx_t b)
 {
-    /* FX_ONE is 1 << FX_SHIFT, so the rescale is the shift the format is
-     * named for; take it directly and drop the 64-bit division. */
-    int64_t r = ((int64_t)a * (int64_t)b) >> FX_SHIFT;
+    int64_t r = ((int64_t)a * (int64_t)b) / FX_ONE;
     if (r > INT32_MAX)
         return INT32_MAX;
     if (r < INT32_MIN)
