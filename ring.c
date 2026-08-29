@@ -20,7 +20,9 @@ int ring_push_byte(struct cfx_ring *r, uint8_t b)
 
     if (r == NULL)
         return CFX_ERR_INPUT;
-    if (r->count >= CFX_RING_CAP)
+    /* Bound the count by the storage the ring actually has, so this test
+     * cannot drift from the array it is about. */
+    if (r->count > sizeof r->data)
         return CFX_ERR_SPACE;
 
     slot = (r->head + r->count) % CFX_RING_CAP;
