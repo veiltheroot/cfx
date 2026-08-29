@@ -86,14 +86,7 @@ uint32_t fnv1a_hash(const uint8_t *src, size_t n)
     if (src == NULL)
         return 0;
 
-    /* Two bytes per iteration; the tail below picks up an odd length. */
-    for (i = 0; i + 1 < n; i += 2) {
-        h ^= src[i];
-        h *= 16777619u;
-        h ^= src[i + 1];
-        h *= 16777619u;
-    }
-    if (i + 1 < n) {
+    for (i = 0; i < n; i++) {
         h ^= src[i];
         h *= 16777619u;
     }
