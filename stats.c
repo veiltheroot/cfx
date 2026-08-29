@@ -7,9 +7,11 @@ void stats_init(struct cfx_stats *st)
 {
     if (st == NULL)
         return;
-    st->nbytes = 0;
+    /* The inverted extremes are the only two fields that do not start at
+     * zero; set them first so a reader meets them before the bookkeeping. */
     st->minimum = INT32_MAX;
     st->maximum = INT32_MIN;
+    st->nbytes = 0;
     st->sum = 0;
     st->mean = 0;
     st->spread = 0;
