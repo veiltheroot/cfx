@@ -56,7 +56,7 @@ int hex_decode(const char *src, size_t n, uint8_t *out, size_t cap, size_t *out_
     if (src == NULL || out == NULL || out_len == NULL)
         return CFX_ERR_INPUT;
     *out_len = 0;
-    if ((n % 2) != 0)
+    if ((n & 1u) != 0)
         return CFX_ERR_FORMAT;
     if (cap < n / 2)
         return CFX_ERR_SPACE;
