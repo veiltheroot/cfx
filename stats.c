@@ -140,6 +140,14 @@ int stats_pack_range(const struct cfx_stats *st, uint8_t *out, size_t cap,
     for (i = 0; i < hi.len; i++)
         out[o++] = hi.bytes[i];
 
+    /* Leave no stale bytes behind the packed range: a caller that
+     * digests the whole buffer should not see what was there before. */
+    {
+        size_t z;
+        for (z = o; z < cap; z++)
+            out[z] = 0;
+    }
+
     *out_len = o;
     return CFX_OK;
 }
