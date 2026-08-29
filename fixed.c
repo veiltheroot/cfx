@@ -15,12 +15,10 @@ fx_t fx_add(fx_t a, fx_t b)
 /* a - b, saturating.  Not commutative: a is the minuend. */
 fx_t fx_sub(fx_t a, fx_t b)
 {
-    int64_t r = (int64_t)a - (int64_t)b;
-    if (r > INT32_MAX)
-        return INT32_MAX;
-    if (r < INT32_MIN)
-        return INT32_MIN;
-    return (fx_t)r;
+    /* Subtracting is adding the negation, so the saturating range check only
+     * has to exist in one place.  The negation is taken at 64 bits, where it
+     * cannot overflow. */
+    return fx_add(a, (fx_t)(-(int64_t)b));
 }
 
 /* a * b, with the Q16.16 rescale, truncating toward zero. */
