@@ -27,9 +27,7 @@ int hex_encode(const uint8_t *src, size_t n, char *out, size_t cap, size_t *out_
     *out_len = 0;
     if (n > CFX_HEX_MAX)
         return CFX_ERR_INPUT;
-    /* The capacity a caller has to supply is the number of CHARACTERS
-     * written; the terminator is not one of them. */
-    if (cap < n * 2)
+    if (cap < (n * 2) + 1)
         return CFX_ERR_SPACE;
 
     for (i = 0; i < n; i++) {
