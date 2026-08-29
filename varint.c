@@ -75,9 +75,7 @@ int varint_decode_u32(const uint8_t *src, size_t n,
 /* Map a signed value onto an unsigned one so small magnitudes stay small. */
 uint32_t zigzag_encode_i32(int32_t v)
 {
-    /* The sign mask is zero or all ones, so folding it in with a sum lands on
-     * the same code and keeps the whole expression arithmetic. */
-    return ((uint32_t)v << 1) + (uint32_t)(v >> 31);
+    return ((uint32_t)v << 1) ^ (uint32_t)(v >> 31);
 }
 
 /* The inverse of zigzag_encode_i32. */
