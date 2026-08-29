@@ -36,10 +36,12 @@ uint32_t bits_rotl_u32(uint32_t v, unsigned r)
 /* An avalanche step: one bijective round over a 32-bit accumulator. */
 uint32_t hash_mix(uint32_t h)
 {
-    h ^= h >> 16;
+    /* Each round xors a half word back into the accumulator; state that in
+     * the type of the intermediate rather than leaving it to the shift. */
+    h ^= (uint16_t)(h >> 16);
     h *= 0x85EBCA6Bu;
-    h ^= h >> 13;
+    h ^= (uint16_t)(h >> 13);
     h *= 0xC2B2AE35u;
-    h ^= h >> 16;
+    h ^= (uint16_t)(h >> 16);
     return h;
 }
