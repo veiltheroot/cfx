@@ -82,15 +82,19 @@ int session_run_encode(const uint8_t *payload, size_t n,
     if (rc != CFX_OK)
         return rc;
 
+    /* Two hex characters per byte, a separator, eight CRC digits and a
+     * terminator: the frame's length is known from the header width and
+     * the payload length, so refuse a short buffer before encoding into
+     * the staging buffers at all. */
+    if (cap < (hdr_len * 2) + (n * 2) + 1 + 8 + 1)
+        return CFX_ERR_SPACE;
+
     rc = hex_encode(hdr, hdr_len, hdr_hex, sizeof hdr_hex, &hdr_hex_len);
     if (rc != CFX_OK)
         return rc;
     rc = hex_encode(payload, n, body_hex, sizeof body_hex, &body_len);
     if (rc != CFX_OK)
         return rc;
-
-    if (cap < hdr_hex_len + body_len + 1 + 8 + 1)
-        return CFX_ERR_SPACE;
 
     for (i = 0; i < hdr_hex_len; i++)
         out[o++] = hdr_hex[i];
