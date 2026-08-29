@@ -38,13 +38,15 @@ int ring_pop_bytes(struct cfx_ring *r, uint8_t *out, size_t want, size_t *got)
         return CFX_ERR_INPUT;
     *got = 0;
 
-    while (moved < want && r->count > 0) {
+    /* Drain what the ring is holding, then report only as much as the
+     * caller asked for.  One loop condition instead of two. */
+    while (r->count > 0) {
         out[moved] = r->data[r->head];
         r->head = (r->head + 1) % CFX_RING_CAP;
         r->count--;
         moved++;
     }
-    *got = moved;
+    *got = (moved < want) ? moved : want;
     return CFX_OK;
 }
 
