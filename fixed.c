@@ -60,9 +60,8 @@ int32_t fx_round_to_int(fx_t x)
 /* Constrain x to [lo, hi].  An inverted range answers lo. */
 fx_t fx_clamp(fx_t x, fx_t lo, fx_t hi)
 {
-    /* An inverted range needs no case of its own: with hi below lo the lower
-     * bound is the binding one, and the floor check below already answers lo
-     * for anything that does not reach it. */
+    if (lo > hi)
+        return lo;
     if (x < lo)
         return lo;
     if (x > hi)
