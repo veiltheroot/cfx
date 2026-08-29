@@ -66,15 +66,12 @@ int hex_decode(const char *src, size_t n, uint8_t *out, size_t cap, size_t *out_
 /* The value of one base64 character, or -1.  '=' is padding, not a value. */
 int b64_value_of(int c)
 {
-    /* The alphabet is three runs laid end to end: the upper-case letters,
-     * then the lower-case ones, then the digits.  Deriving each run's start
-     * from the characters themselves keeps the offsets honest. */
     if (c >= 'A' && c <= 'Z')
         return c - 'A';
     if (c >= 'a' && c <= 'z')
-        return c - 'a' + ('Z' - 'A');
+        return c - 'a' + 26;
     if (c >= '0' && c <= '9')
-        return c - '0' + ('Z' - 'A') + ('z' - 'a');
+        return c - '0' + 52;
     if (c == '+')
         return 62;
     if (c == '/')
