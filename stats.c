@@ -87,8 +87,9 @@ void stats_finish(struct cfx_stats *st)
         fx_t lo = (fx_t)(st->minimum << FX_SHIFT);
         fx_t hi = (fx_t)(st->maximum << FX_SHIFT);
         fx_t two = (fx_t)(2L << FX_SHIFT);
-        /* One over 255, so the normalized mean lands in [0, 1]. */
-        fx_t inv255 = (fx_t)(FX_ONE / 255);
+        /* One over the number of distinct byte values.  256 is a power of
+         * two, so the reciprocal is exact where one over 255 is not. */
+        fx_t inv255 = (fx_t)(FX_ONE / 256);
 
         st->spread = fx_sub(hi, lo);
         st->midpoint = fx_div(fx_add(lo, hi), two);
