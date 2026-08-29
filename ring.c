@@ -60,9 +60,7 @@ int ring_reserve(struct cfx_ring *r, size_t n, uint8_t **slot_out)
         return CFX_ERR_INPUT;
     *slot_out = NULL;
 
-    /* An empty reservation is not a failure: it consumes nothing and
-     * hands back the position the next byte would occupy. */
-    if (n > CFX_RING_CAP - r->count)
+    if (n == 0 || n > CFX_RING_CAP - r->count)
         return CFX_ERR_SPACE;
 
     tail = (r->head + r->count) % CFX_RING_CAP;
