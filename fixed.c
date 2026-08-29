@@ -5,11 +5,12 @@
 fx_t fx_add(fx_t a, fx_t b)
 {
     int64_t r = (int64_t)a + (int64_t)b;
-    if (r > INT32_MAX)
-        return INT32_MAX;
-    if (r < INT32_MIN)
-        return INT32_MIN;
-    return (fx_t)r;
+    /* One test for "in range", one exit for the two bounds: a sum that left
+     * the range on the high side is positive, one that left it on the low
+     * side is negative. */
+    if (r >= INT32_MIN && r <= INT32_MAX)
+        return (fx_t)r;
+    return r > 0 ? INT32_MAX : INT32_MIN;
 }
 
 /* a - b, saturating.  Not commutative: a is the minuend. */
