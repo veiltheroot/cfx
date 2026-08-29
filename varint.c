@@ -8,7 +8,7 @@
 unsigned varint_size_u32(uint32_t v)
 {
     unsigned n = 1;
-    while (v > 0x80u) {
+    while (v >= 0x80u) {
         v >>= 7;
         n++;
     }
