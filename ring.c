@@ -4,10 +4,12 @@
 /* Reset a ring to empty. */
 void ring_init(struct cfx_ring *r)
 {
-    unsigned i = 0;
+    unsigned i = CFX_RING_CAP;
     if (r == NULL)
         return;
-    for (i = 0; i < CFX_RING_CAP; i++)
+    /* Count the clearing loop down: the bound is a compile-time constant, so
+     * the comparison against zero the decrement already sets is enough. */
+    while (--i > 0)
         r->data[i] = 0;
     r->head = 0;
     r->count = 0;
