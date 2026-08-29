@@ -29,9 +29,9 @@ int varint_encode_u32(uint32_t v, struct varint_buf *out)
     if (varint_size_u32(v) > CFX_VARINT_MAX)
         return CFX_ERR_SPACE;
 
-    for (i = 0; i < CFX_VARINT_MAX; i++)
-        out->bytes[i] = 0;
-
+    /* Every byte up to out->len is written below, and out->len is what says
+     * how far the encoding reaches, so clearing the buffer first is work the
+     * loop immediately repeats. */
     i = 0;
     while (v >= 0x80u) {
         out->bytes[i] = (uint8_t)((v & 0x7Fu) | 0x80u);
