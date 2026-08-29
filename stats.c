@@ -23,9 +23,12 @@ void stats_min_max_update(struct cfx_stats *st, int32_t v)
 {
     if (st == NULL)
         return;
+    /* A value cannot be both below the recorded minimum and above the
+     * recorded maximum, so the second test only has to run when the first
+     * one did not fire. */
     if (v < st->minimum)
         st->minimum = v;
-    if (v > st->maximum)
+    else if (v > st->maximum)
         st->maximum = v;
 }
 
