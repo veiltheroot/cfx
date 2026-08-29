@@ -7,10 +7,10 @@ void ring_init(struct cfx_ring *r)
     unsigned i = 0;
     if (r == NULL)
         return;
-    for (i = 0; i < CFX_RING_CAP; i++)
-        r->data[i] = 0;
     r->head = 0;
     r->count = 0;
+    for (i = 0; i < CFX_RING_CAP; i++)
+        r->data[i] = 0;
 }
 
 /* Append one byte.  A full ring is an error, not an overwrite. */
