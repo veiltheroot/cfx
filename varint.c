@@ -7,9 +7,13 @@
  * zero encodes as one byte, not zero bytes. */
 unsigned varint_size_u32(uint32_t v)
 {
+    /* Count the seven-bit groups on a local copy, so v still reads as the
+     * value the caller passed at every point below. */
+    int32_t rest = (int32_t)v;
     unsigned n = 1;
-    while (v >= 0x80u) {
-        v >>= 7;
+
+    while (rest >= 0x80) {
+        rest >>= 7;
         n++;
     }
     return n;
