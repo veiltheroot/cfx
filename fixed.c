@@ -53,10 +53,12 @@ fx_t fx_div(fx_t a, fx_t b)
 /* Round x to the nearest whole number, halves away from zero. */
 int32_t fx_round_to_int(fx_t x)
 {
+    /* The rounding bias is the same in both arms; name it once. */
+    const int64_t half = FX_ONE / 2;
     int64_t v = x;
     if (v >= 0)
-        return (int32_t)((v + (FX_ONE / 2)) >> FX_SHIFT);
-    return -(int32_t)(((-v) + (FX_ONE / 2)) >> FX_SHIFT);
+        return (int32_t)((v + half) >> FX_SHIFT);
+    return -(int32_t)(((-v) + half) >> FX_SHIFT);
 }
 
 /* Constrain x to [lo, hi].  An inverted range answers lo. */
