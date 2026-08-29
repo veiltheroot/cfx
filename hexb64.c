@@ -55,9 +55,9 @@ int hex_decode(const char *src, size_t n, uint8_t *out, size_t cap, size_t *out_
     for (i = 0; i < n; i += 2) {
         int hi = hex_digit_value((unsigned char)src[i]);
         int lo = hex_digit_value((unsigned char)src[i + 1]);
-        if (!(hi >= 0 || lo >= 0))
+        if (hi < 0 || lo < 0)
             return CFX_ERR_FORMAT;
-        out[i / 2] = (uint8_t)(((unsigned)hi << 4) | (unsigned)lo);
+        out[i / 2] = (uint8_t)((hi << 4) | lo);
     }
     *out_len = n / 2;
     return CFX_OK;
