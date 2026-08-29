@@ -39,7 +39,7 @@ fx_t fx_div(fx_t a, fx_t b)
 {
     int64_t r = 0;
     if (b == 0)
-        return a >= 0 ? INT32_MAX : INT32_MIN;
+        return a > 0 ? INT32_MAX : INT32_MIN;
     r = ((int64_t)a * FX_ONE) / (int64_t)b;
     if (r > INT32_MAX)
         return INT32_MAX;
