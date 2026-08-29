@@ -28,9 +28,9 @@ unsigned bits_leading_zeros_u32(uint32_t v)
 uint32_t bits_rotl_u32(uint32_t v, unsigned r)
 {
     r &= 31u;
-    if (r == 0)
-        return v;
-    return (uint32_t)((v << r) | (v >> (32u - r)));
+    /* Both distances are masked, so the shift by the full word width that the
+     * zero case existed to avoid cannot happen and the branch can go. */
+    return (uint32_t)((v >> r) | (v << ((32u - r) & 31u)));
 }
 
 /* An avalanche step: one bijective round over a 32-bit accumulator. */
