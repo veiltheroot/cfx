@@ -87,12 +87,14 @@ void stats_finish(struct cfx_stats *st)
         fx_t lo = (fx_t)(st->minimum << FX_SHIFT);
         fx_t hi = (fx_t)(st->maximum << FX_SHIFT);
         fx_t two = (fx_t)(2L << FX_SHIFT);
-        /* One over 255, so the normalized mean lands in [0, 1]. */
-        fx_t inv255 = (fx_t)(FX_ONE / 255);
+        /* Full scale for a byte, so the normalized mean lands in [0, 1]. */
+        fx_t full = (fx_t)(255L << FX_SHIFT);
 
         st->spread = fx_sub(hi, lo);
         st->midpoint = fx_div(fx_add(lo, hi), two);
-        st->normalized = fx_mul(st->mean, inv255);
+        /* Divide by full scale rather than multiplying by a reciprocal that
+         * Q16.16 cannot hold exactly: FX_ONE / 255 truncates. */
+        st->normalized = fx_div(st->mean, full);
         st->mean_rounded = fx_round_to_int(st->mean);
     }
 }
