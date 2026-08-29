@@ -70,9 +70,10 @@ uint32_t fletcher16(const uint8_t *src, size_t n)
     if (src == NULL)
         return 0;
 
+    /* Both sums stay inside a byte, so mask rather than divide. */
     for (i = 0; i < n; i++) {
-        a = (a + src[i]) % 255u;
-        b = (b + a) % 255u;
+        a = (a + src[i]) & 0xFFu;
+        b = (b + a) & 0xFFu;
     }
     return (b << 8) | a;
 }
