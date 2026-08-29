@@ -12,9 +12,10 @@ void stats_init(struct cfx_stats *st)
     st->maximum = INT32_MIN;
     st->sum = 0;
     st->mean = 0;
-    /* spread, midpoint, normalized and mean_rounded are derived: stats_finish
-     * computes every one of them out of the fields above, so zeroing them
-     * here only suggested they carry a meaning before it has run. */
+    st->spread = 0;
+    st->midpoint = 0;
+    st->normalized = 0;
+    st->mean_rounded = 0;
 }
 
 /* Widen the recorded range to include v. */
