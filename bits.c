@@ -15,18 +15,11 @@ unsigned bits_popcount_u32(uint32_t v)
 /* The number of leading zero bits in v.  Zero has 32. */
 unsigned bits_leading_zeros_u32(uint32_t v)
 {
-    unsigned n = 32u;
-    unsigned s = 0;
-
-    /* Smear the highest set bit down over the word, then count what is left:
-     * the walk below then runs once per significant bit rather than once per
-     * leading zero, and there is no mask to carry alongside the count. */
-    for (s = 1u; s < 16u; s <<= 1)
-        v |= v >> s;
-
-    while (v != 0) {
-        n--;
-        v &= v - 1u;
+    unsigned n = 0;
+    uint32_t mask = 0x80000000u;
+    while (mask != 0 && (v & mask) == 0) {
+        n++;
+        mask >>= 1;
     }
     return n;
 }
