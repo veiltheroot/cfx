@@ -44,20 +44,23 @@ void crc32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
 void adler32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
 {
     size_t i = 0;
-    uint32_t a = 0;
-    uint32_t b = 0;
+    uint16_t a = 0;
+    uint16_t b = 0;
 
     if (st == NULL || src == NULL)
         return;
 
+    /* Both sums live modulo 65521 and so fit sixteen bits.  Addition commutes
+     * with the modulus, so one reduction at the end does the work of one per
+     * byte. */
     a = st->adler_a;
     b = st->adler_b;
     for (i = 0; i < n; i++) {
-        a = (a + src[i]) % ADLER_MOD;
-        b = (b + a) % ADLER_MOD;
+        a += src[i];
+        b += a;
     }
-    st->adler_a = a;
-    st->adler_b = b;
+    st->adler_a = a % ADLER_MOD;
+    st->adler_b = b % ADLER_MOD;
 }
 
 /* The Fletcher-16 checksum of a buffer, as a single packed value. */
