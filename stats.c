@@ -107,7 +107,8 @@ int stats_pack_range(const struct cfx_stats *st, uint8_t *out, size_t cap,
     struct varint_buf lo;
     struct varint_buf hi;
     size_t o = 0;
-    uint32_t i = 0;
+    /* The index walks the same bytes the offset does; give it the same type. */
+    size_t i = 0;
     int rc = 0;
 
     if (st == NULL || out == NULL || out_len == NULL)
