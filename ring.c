@@ -23,7 +23,9 @@ int ring_push_byte(struct cfx_ring *r, uint8_t b)
     if (r->count >= CFX_RING_CAP)
         return CFX_ERR_SPACE;
 
-    slot = (r->head + r->count) % CFX_RING_CAP;
+    /* CFX_RING_CAP is a power of two and the sum is unsigned, so the mask
+     * is the modulo, without the division. */
+    slot = (r->head + r->count) & (CFX_RING_CAP - 1);
     r->data[slot] = b;
     r->count++;
     return CFX_OK;
