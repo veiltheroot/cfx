@@ -17,10 +17,12 @@ fx_t fx_add(fx_t a, fx_t b)
 fx_t fx_sub(fx_t a, fx_t b)
 {
     int64_t r = (int64_t)a - (int64_t)b;
-    if (r > INT32_MAX)
-        return INT32_MAX;
+    /* The bounds are checked low first, so the pair reads in the same order
+     * as the interval it describes. */
     if (r < INT32_MIN)
         return INT32_MIN;
+    if (r > INT32_MAX)
+        return INT32_MAX;
     return (fx_t)r;
 }
 
