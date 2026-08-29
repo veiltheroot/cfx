@@ -57,7 +57,12 @@ uint32_t stats_bit_profile(const uint8_t *src, size_t n)
     if (src == NULL)
         return 0;
 
-    for (i = 0; i < n; i++) {
+    /* packed carries one bit per byte in a 32-bit word, so only the last 32
+     * bytes of the buffer can still be in it when the loop ends.  Start
+     * there: everything earlier is shifted back out before it is looked at. */
+    if (n > 32)
+        i = n - 32;
+    for (; i < n; i++) {
         ones += bits_popcount_u32(src[i]);
         packed = (packed << 1) | (uint32_t)(src[i] & 1u);
     }
