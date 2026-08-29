@@ -120,7 +120,10 @@ int stats_pack_range(const struct cfx_stats *st, uint8_t *out, size_t cap,
     rc = varint_encode_u32(zigzag_encode_i32(st->maximum), &hi);
     if (rc != CFX_OK)
         return rc;
-    if (cap < (size_t)lo.len + hi.len)
+    /* The pair is two varints wide at worst, and which values the caller
+     * happens to hold is not something it can plan a buffer around.  Ask for
+     * the format's own bound instead. */
+    if (cap < (size_t)(CFX_VARINT_MAX * 2))
         return CFX_ERR_SPACE;
 
     for (i = 0; i < lo.len; i++)
