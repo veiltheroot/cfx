@@ -148,9 +148,7 @@ int session_run_decode(const char *text, size_t n, struct cfx_frame *out)
             break;
         }
     }
-    /* State the shape a frame must have, rather than the two ways it can
-     * fail to have it: a separator, and eight CRC digits after it. */
-    if (!(found || n - colon == 9))
+    if (!found || n - colon != 9)
         return CFX_ERR_FORMAT;
 
     /* Every character before the separator must be a hex digit. */
