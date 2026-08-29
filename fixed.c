@@ -40,7 +40,14 @@ fx_t fx_div(fx_t a, fx_t b)
     int64_t r = 0;
     if (b == 0)
         return a >= 0 ? INT32_MAX : INT32_MIN;
-    r = ((int64_t)a * FX_ONE) / (int64_t)b;
+    {
+        int64_t num = (int64_t)a * FX_ONE;
+        int64_t den = (int64_t)b;
+        int64_t half = den / 2;
+        /* Nudge by half a denominator before dividing, so the quotient is
+         * rounded rather than left wherever truncation puts it. */
+        r = ((num >= 0) == (den >= 0)) ? (num + half) / den : (num - half) / den;
+    }
     if (r > INT32_MAX)
         return INT32_MAX;
     if (r < INT32_MIN)
