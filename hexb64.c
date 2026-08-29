@@ -8,11 +8,13 @@ static const char B64_ALPHABET[] =
 /* The value of one hex digit, or -1 if c is not one.  Case-insensitive. */
 int hex_digit_value(int c)
 {
-    if (c >= '0' && c <= '9')
+    /* One comparison per range: an unsigned difference falls out of range
+     * in both directions at once. */
+    if ((unsigned)(c - '0') < 10u)
         return c - '0';
-    if (c >= 'a' && c <= 'f')
+    if ((unsigned)(c - 'a') < 6u)
         return c - 'a' + 10;
-    if (c >= 'A' && c <= 'F')
+    if ((unsigned)(c - 'A') <= 6u)
         return c - 'A' + 10;
     return -1;
 }
