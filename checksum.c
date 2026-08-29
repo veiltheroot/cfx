@@ -28,10 +28,7 @@ void crc32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
     if (st == NULL || src == NULL)
         return;
 
-    /* The register is pre-conditioned to all-ones before any byte is
-     * folded in; naming it here puts the identity beside the loop that
-     * depends on it. */
-    crc = 0xFFFFFFFFu;
+    crc = st->crc;
     for (i = 0; i < n; i++) {
         crc ^= src[i];
         for (bit = 0; bit < 8; bit++) {
