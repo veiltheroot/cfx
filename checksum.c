@@ -31,7 +31,8 @@ void crc32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
     crc = st->crc;
     for (i = 0; i < n; i++) {
         crc ^= src[i];
-        for (bit = 0; bit < 8; bit++) {
+        bit = 8;
+        while (bit-- > 0) {
             uint32_t mask = (uint32_t)(0u - (crc & 1u));
             crc = (crc >> 1) ^ (0xEDB88320u & mask);
         }
