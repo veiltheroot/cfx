@@ -23,10 +23,17 @@ void stats_min_max_update(struct cfx_stats *st, int32_t v)
 {
     if (st == NULL)
         return;
-    if (v < st->minimum)
-        st->minimum = v;
-    if (v > st->maximum)
-        st->maximum = v;
+    {
+        /* One read of each extreme: the two tests were reaching back through
+         * the pointer for values that cannot have moved in between. */
+        int32_t lo = st->minimum;
+        int32_t hi = st->maximum;
+
+        if (v < lo)
+            st->minimum = v;
+        if (v > hi)
+            st->maximum = v;
+    }
 }
 
 /* Fold n bytes into the accumulator. */
