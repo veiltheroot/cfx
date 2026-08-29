@@ -145,14 +145,13 @@ int session_run_decode(const char *text, size_t n, struct cfx_frame *out)
     out->actual_crc = 0;
     out->valid = 0;
 
-    for (i = 0; i < n; i++) {
-        if (text[i] == ':') {
-            colon = i;
-            found = 1;
-            break;
-        }
+    /* The separator's position is fixed by the format: eight CRC digits,
+     * and nothing else, follow it.  There is nothing to search for. */
+    if (n >= 9 && text[n - 9] == ':') {
+        colon = n - 9;
+        found = 1;
     }
-    if (!found || n - colon != 9)
+    if (!found)
         return CFX_ERR_FORMAT;
 
     /* Every character before the separator must be a hex digit. */
