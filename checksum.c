@@ -32,8 +32,10 @@ void crc32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
     for (i = 0; i < n; i++) {
         crc ^= src[i];
         for (bit = 0; bit < 8; bit++) {
-            uint32_t mask = (uint32_t)(0u - (crc & 1u));
-            crc = (crc >> 1) ^ (0xEDB88320u & mask);
+            /* Sign-extend the low bit across the word, so the polynomial is
+             * folded in exactly when the bit that fell off was set. */
+            int32_t mask = -(int32_t)(crc & 1u);
+            crc = (uint32_t)((int32_t)crc >> 1) ^ (0xEDB88320u & (uint32_t)mask);
         }
     }
     st->crc = crc;
