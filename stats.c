@@ -143,9 +143,10 @@ int stats_unpack_range(const uint8_t *src, size_t n, int32_t *min_out, int32_t *
 
     if (src == NULL || min_out == NULL || max_out == NULL)
         return CFX_ERR_INPUT;
-    *min_out = 0;
-    *max_out = 0;
 
+    /* Publish the range only once both halves have decoded, so a caller that
+     * looks at the outputs after a failure sees what it had rather than a
+     * zero it could mistake for a decoded extreme. */
     rc = varint_decode_u32(src, n, &lo, &used_lo);
     if (rc != CFX_OK)
         return rc;
