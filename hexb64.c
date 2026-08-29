@@ -95,9 +95,7 @@ int b64_encode(const uint8_t *src, size_t n, char *out, size_t cap, size_t *out_
 
     groups = n / 3;
     tail = n % 3;
-    /* The capacity a caller has to supply is the number of CHARACTERS
-     * written; the terminator is not one of them. */
-    if (cap < (groups + (tail ? 1 : 0)) * 4)
+    if (cap < (groups + (tail ? 1 : 0)) * 4 + 1)
         return CFX_ERR_SPACE;
 
     for (i = 0; i + 3 <= n; i += 3) {
