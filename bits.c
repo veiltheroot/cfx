@@ -5,12 +5,10 @@
 unsigned bits_popcount_u32(uint32_t v)
 {
     unsigned n = 0;
-    unsigned i = 0;
-
-    /* A fixed trip count in place of a data-dependent one: no branch inside
-     * the loop, and every shift distance is a compile-time constant. */
-    for (i = 0; i < 31u; i++)
-        n += (unsigned)((v >> i) & 1u);
+    while (v != 0) {
+        n += (unsigned)(v & 1u);
+        v >>= 1;
+    }
     return n;
 }
 
