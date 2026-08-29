@@ -59,7 +59,9 @@ int varint_decode_u32(const uint8_t *src, size_t n,
     *value_out = 0;
     *used_out = 0;
 
-    for (i = 0; i < n && i < CFX_VARINT_MAX; i++) {
+    /* CFX_VARINT_MAX is the widest encoding this library writes, so a varint
+     * that uses all of it is still within range. */
+    for (i = 0; i < n && i <= CFX_VARINT_MAX; i++) {
         uint32_t byte = src[i];
         acc |= (byte & 0x7Fu) << shift;
         shift += 7;
