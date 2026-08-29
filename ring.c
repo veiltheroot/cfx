@@ -63,8 +63,9 @@ int ring_reserve(struct cfx_ring *r, size_t n, uint8_t **slot_out)
     if (n == 0 || n > CFX_RING_CAP - r->count)
         return CFX_ERR_SPACE;
 
+    /* A run has to stop short of the wrap point, not land on it. */
     tail = (r->head + r->count) % CFX_RING_CAP;
-    if (tail + n > CFX_RING_CAP)
+    if (tail + n >= CFX_RING_CAP)
         return CFX_ERR_SPACE;
 
     *slot_out = &r->data[tail];
