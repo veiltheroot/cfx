@@ -134,9 +134,7 @@ int session_run_decode(const char *text, size_t n, struct cfx_frame *out)
     if (text == NULL || out == NULL)
         return CFX_ERR_INPUT;
 
-    /* Clear only what a decode can have written: payload_len bounds every
-     * byte of the array the previous call filled in. */
-    for (i = 0; i < out->payload_len && i < CFX_MAX_PAYLOAD; i++)
+    for (i = 0; i < CFX_MAX_PAYLOAD; i++)
         out->payload[i] = 0;
     out->payload_len = 0;
     out->declared_crc = 0;
