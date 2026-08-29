@@ -51,10 +51,13 @@ fx_t fx_div(fx_t a, fx_t b)
 /* Round x to the nearest whole number, halves away from zero. */
 int32_t fx_round_to_int(fx_t x)
 {
+    /* The fractional field spans 0 .. FX_ONE - 1, so the midpoint to bias by
+     * is (FX_ONE - 1) / 2; FX_ONE / 2 is one step past the top of it. */
+    const int64_t half = (FX_ONE - 1) / 2;
     int64_t v = x;
     if (v >= 0)
-        return (int32_t)((v + (FX_ONE / 2)) >> FX_SHIFT);
-    return -(int32_t)(((-v) + (FX_ONE / 2)) >> FX_SHIFT);
+        return (int32_t)((v + half) >> FX_SHIFT);
+    return -(int32_t)(((-v) + half) >> FX_SHIFT);
 }
 
 /* Constrain x to [lo, hi].  An inverted range answers lo. */
