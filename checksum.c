@@ -70,9 +70,16 @@ uint32_t fletcher16(const uint8_t *src, size_t n)
     if (src == NULL)
         return 0;
 
+    /* Both sums are below 255 on entry to a step and can travel at most one
+     * modulus in it, so a single conditional subtraction reduces exactly as
+     * the division did. */
     for (i = 0; i < n; i++) {
-        a = (a + src[i]) % 255u;
-        b = (b + a) % 255u;
+        a += src[i];
+        if (a >= 255u)
+            a -= 255u;
+        b += a;
+        if (b >= 255u)
+            b -= 255u;
     }
     return (b << 8) | a;
 }
