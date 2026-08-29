@@ -80,15 +80,15 @@ uint32_t fletcher16(const uint8_t *src, size_t n)
 /* FNV-1a over a buffer, finished with one avalanche round. */
 uint32_t fnv1a_hash(const uint8_t *src, size_t n)
 {
-    const uint32_t fnv_prime = 16777619u;
     uint32_t h = 2166136261u;
     size_t i = 0;
 
     if (src == NULL)
         return 0;
 
-    /* One step per byte: scale the accumulator, then fold the byte in. */
-    for (i = 0; i < n; i++)
-        h = (h * fnv_prime) ^ src[i];
+    for (i = 0; i < n; i++) {
+        h ^= src[i];
+        h *= 16777619u;
+    }
     return hash_mix(bits_rotl_u32(h, 7));
 }
