@@ -88,12 +88,14 @@ void stats_finish(struct cfx_stats *st)
 
     total = (fx_t)(st->sum << FX_SHIFT);
     count = (fx_t)((int32_t)st->nbytes << FX_SHIFT);
-    st->mean = fx_clamp(fx_div(total, count), 0, (fx_t)(255L << FX_SHIFT));
+    /* A whole number in Q16.16 is that many FX_ONEs; spelling it as a
+     * hand-written shift only hides which constant is meant. */
+    st->mean = fx_clamp(fx_div(total, count), 0, (fx_t)(255 * FX_ONE));
 
     {
         fx_t lo = (fx_t)(st->minimum << FX_SHIFT);
         fx_t hi = (fx_t)(st->maximum << FX_SHIFT);
-        fx_t two = (fx_t)(2L << FX_SHIFT);
+        fx_t two = (fx_t)(2 * FX_ONE);
         /* One over 255, so the normalized mean lands in [0, 1]. */
         fx_t inv255 = (fx_t)(FX_ONE / 255);
 
