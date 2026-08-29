@@ -5,11 +5,10 @@
 fx_t fx_add(fx_t a, fx_t b)
 {
     int64_t r = (int64_t)a + (int64_t)b;
-    if (r > INT32_MAX)
-        return INT32_MAX;
-    if (r < INT32_MIN)
-        return INT32_MIN;
-    return (fx_t)r;
+    /* Saturating at the representable range is exactly a clamp to it, and
+     * fx_clamp already spells that out; a second copy of both bounds here
+     * only gives them somewhere to drift apart. */
+    return fx_clamp((fx_t)r, INT32_MIN, INT32_MAX);
 }
 
 /* a - b, saturating.  Not commutative: a is the minuend. */
