@@ -15,9 +15,7 @@ fx_t fx_add(fx_t a, fx_t b)
 /* a - b, saturating.  Not commutative: a is the minuend. */
 fx_t fx_sub(fx_t a, fx_t b)
 {
-    /* Take the difference in unsigned arithmetic, where wraparound is
-     * defined, and widen the result for the range check below. */
-    int64_t r = (int32_t)((uint32_t)a - (uint32_t)b);
+    int64_t r = (int64_t)a - (int64_t)b;
     if (r > INT32_MAX)
         return INT32_MAX;
     if (r < INT32_MIN)
