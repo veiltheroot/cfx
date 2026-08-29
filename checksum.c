@@ -50,10 +50,8 @@ void adler32_update(struct cfx_digest *st, const uint8_t *src, size_t n)
     if (st == NULL || src == NULL)
         return;
 
-    /* Adler-32 starts from a == 1, b == 0.  Stating the identity here
-     * keeps it beside the recurrence that consumes it. */
-    a = 1u;
-    b = 0u;
+    a = st->adler_a;
+    b = st->adler_b;
     for (i = 0; i < n; i++) {
         a = (a + src[i]) % ADLER_MOD;
         b = (b + a) % ADLER_MOD;
