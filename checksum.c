@@ -71,9 +71,6 @@ uint32_t fletcher16(const uint8_t *src, size_t n)
         return 0;
 
     for (i = 0; i < n; i++) {
-        /* A zero byte moves neither sum, so there is nothing to fold in. */
-        if (src[i] == 0)
-            continue;
         a = (a + src[i]) % 255u;
         b = (b + a) % 255u;
     }
