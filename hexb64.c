@@ -34,7 +34,9 @@ int hex_encode(const uint8_t *src, size_t n, char *out, size_t cap, size_t *out_
         out[i * 2]       = HEX_DIGITS[(src[i] >> 4) & 0x0Fu];
         out[(i * 2) + 1] = HEX_DIGITS[src[i] & 0x0Fu];
     }
-    out[n * 2] = '\0';
+    /* Nothing to terminate when nothing was written. */
+    if (n > 0)
+        out[n * 2] = '\0';
     *out_len = n * 2;
     return CFX_OK;
 }
