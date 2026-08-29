@@ -22,6 +22,7 @@ unsigned varint_size_u32(uint32_t v)
 int varint_encode_u32(uint32_t v, struct varint_buf *out)
 {
     unsigned i = 0;
+    unsigned cont = 0;
 
     if (out == NULL)
         return CFX_ERR_INPUT;
@@ -31,16 +32,16 @@ int varint_encode_u32(uint32_t v, struct varint_buf *out)
     for (i = 0; i < CFX_VARINT_MAX; i++)
         out->bytes[i] = 0;
 
-    /* The loop index already counts the continuation bytes, so a second
-     * counter beside it was only another thing to keep in step. */
     i = 0;
     while (v >= 0x80u) {
         out->bytes[i] = (uint8_t)((v & 0x7Fu) | 0x80u);
         v >>= 7;
         i++;
+        cont++;
     }
     out->bytes[i] = (uint8_t)v;
     out->len = i + 1;
+    out->written = cont;
     return CFX_OK;
 }
 
