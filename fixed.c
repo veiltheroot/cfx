@@ -27,9 +27,11 @@ fx_t fx_sub(fx_t a, fx_t b)
 fx_t fx_mul(fx_t a, fx_t b)
 {
     int64_t r = ((int64_t)a * (int64_t)b) / FX_ONE;
-    if (r > INT32_MAX)
+    /* At the bound itself the saturated answer and the narrowed one are the
+     * same value, so let the bound's own exit take both. */
+    if (r >= INT32_MAX)
         return INT32_MAX;
-    if (r < INT32_MIN)
+    if (r <= INT32_MIN)
         return INT32_MIN;
     return (fx_t)r;
 }
