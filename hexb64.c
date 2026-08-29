@@ -98,8 +98,7 @@ int b64_encode(const uint8_t *src, size_t n, char *out, size_t cap, size_t *out_
     if (cap < (groups + (tail ? 1 : 0)) * 4 + 1)
         return CFX_ERR_SPACE;
 
-    /* Consume the whole three-byte groups; the remainder is padded below. */
-    for (i = 0; i + 3 < n; i += 3) {
+    for (i = 0; i + 3 <= n; i += 3) {
         uint32_t w = ((uint32_t)src[i] << 16) | ((uint32_t)src[i + 1] << 8) | src[i + 2];
         out[o++] = B64_ALPHABET[(w >> 18) & 0x3Fu];
         out[o++] = B64_ALPHABET[(w >> 12) & 0x3Fu];
