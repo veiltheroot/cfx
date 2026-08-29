@@ -12,9 +12,7 @@ void digest_init(struct cfx_digest *st)
     st->adler_a = 1u;
     st->adler_b = 0u;
     st->fletcher = 0u;
-    /* FNV-1a counts from its offset basis, not from zero: that is the
-     * identity of the accumulator this field carries. */
-    st->hash = 2166136261u;
+    st->hash = 0u;
     st->profile = 0u;
     st->nbytes = 0u;
     st->mean = 0;
